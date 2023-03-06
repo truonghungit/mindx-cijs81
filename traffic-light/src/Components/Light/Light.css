@@ -1,0 +1,19 @@
+.light {
+  height: 90px;
+  width: 90px;
+  border: 5px solid #000;
+  border-radius: 50%;
+  background: #231d1d;
+}
+
+.light.red.on {
+  background: red;
+}
+
+.light.yellow.on {
+  background: yellow;
+}
+
+.light.green.on {
+  background: green;
+}

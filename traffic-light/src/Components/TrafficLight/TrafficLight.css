@@ -1,0 +1,10 @@
+.traffic-light {
+  background: #ccc;
+  width: 160px;
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
