@@ -1,7 +1,28 @@
 import { useState } from "react";
 
-export default function AddNewExpenseForm() {
+const initFormValue = {
+  name: "",
+  amount: 0,
+  date: "",
+};
+
+export default function AddNewExpenseForm({ onAddNew }) {
   const [isShowForm, setIsShowForm] = useState(false);
+  const [formValue, setFormValue] = useState(initFormValue);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (onAddNew && typeof onAddNew === "function") {
+      onAddNew(formValue);
+
+      setFormValue(initFormValue);
+    }
+  };
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormValue({ ...formValue, [name]: value });
+  };
 
   if (!isShowForm) {
     return (
@@ -19,7 +40,7 @@ export default function AddNewExpenseForm() {
 
   return (
     <div>
-      <form className="p-5">
+      <form className="p-5" onSubmit={handleSubmit}>
         <div className="row mb-3">
           <label htmlFor="name" className="col-sm-2 col-form-label">
             Name
@@ -30,6 +51,9 @@ export default function AddNewExpenseForm() {
               className="form-control"
               id="name"
               placeholder="Enter name here"
+              name="name"
+              value={formValue.name}
+              onChange={handleChange}
             />
           </div>
         </div>
@@ -42,6 +66,9 @@ export default function AddNewExpenseForm() {
               type="number"
               className="form-control"
               id="amount"
+              name="amount"
+              value={formValue.amount}
+              onChange={handleChange}
               placeholder="Enter amount here"
             />
           </div>
@@ -55,6 +82,9 @@ export default function AddNewExpenseForm() {
               type="date"
               className="form-control"
               id="name"
+              name="date"
+              value={formValue.date}
+              onChange={handleChange}
               placeholder="dd/mm/yyyy"
             />
           </div>
