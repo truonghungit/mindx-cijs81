@@ -3,8 +3,10 @@ import "./App.css";
 import AddNewExpenseForm from "./Components/AddNewExpenseForm/AddNewExpenseForm";
 import ExpenseList from "./Components/ExpenseList/ExpenseList";
 import ExpenseFilter from "./Components/ExpenseFilter/ExpenseFilter";
+import ExpenseChart from "./Components/ExpenseChart/ExpenseChart";
 
 import { useState } from "react";
+import { useEffect } from "react";
 
 function generateId() {
   return Math.floor(Math.random() * Date.now());
@@ -35,8 +37,7 @@ function App() {
   const [items, setItems] = useState(initData);
   const [displayItems, setDisplayItems] = useState(initData);
   const [filterValue, setFilterValue] = useState({
-    year: "2023",
-    month: "01",
+    year: new Date().getFullYear(),
   });
 
   const handleAddNew = (newItem) => {
@@ -49,19 +50,30 @@ function App() {
     ]);
   };
 
-  const handleFilterChange = (newValue) => {
-    setFilterValue(newValue);
+  const handleFilterChange = (value) => {
+    setFilterValue(value);
+  };
+
+  useEffect(() => {
     const filteredItems = items.filter((item) => {
-      return new Date(item.date).getFullYear() === +newValue.year;
+      return new Date(item.date).getFullYear() === +filterValue.year;
     });
     setDisplayItems(filteredItems);
-  };
+  }, [items, filterValue]);
 
   return (
     <div className="expense-app">
       <AddNewExpenseForm onAddNew={handleAddNew} />
-      <ExpenseFilter value={filterValue} onChange={handleFilterChange} />
-      <ExpenseList items={displayItems} />
+      <div className="card mt-4">
+        <div className="card-body">
+          <ExpenseFilter
+            filterValue={filterValue}
+            onChange={handleFilterChange}
+          />
+          <ExpenseChart items={displayItems} />
+          <ExpenseList items={displayItems} />
+        </div>
+      </div>
     </div>
   );
 }
