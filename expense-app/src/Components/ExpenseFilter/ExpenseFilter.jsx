@@ -1,8 +1,12 @@
+import { useTranslation } from "../../Context/TranslationContext";
+
 export default function ExpenseFilter({ filterValue, onChange }) {
+  const { translate } = useTranslation();
+
   return (
     <div className="px-4 py-3">
       <div className="d-flex justify-content-between">
-        <div>Filter</div>
+        <div>{translate("filter")}</div>
         <select
           style={{ maxWidth: "120px" }}
           className="form-select"

@@ -1,12 +1,15 @@
-import logo from "./logo.svg";
 import "./App.css";
+
+import { useState, useEffect } from "react";
+
 import AddNewExpenseForm from "./Components/AddNewExpenseForm/AddNewExpenseForm";
 import ExpenseList from "./Components/ExpenseList/ExpenseList";
 import ExpenseFilter from "./Components/ExpenseFilter/ExpenseFilter";
 import ExpenseChart from "./Components/ExpenseChart/ExpenseChart";
-
-import { useState } from "react";
-import { useEffect } from "react";
+import Login from "./Components/Login/Login";
+import Footer from "./Components/Footer/Footer";
+import { useAuth } from "./Context/AuthContext";
+import { TranslationProvider } from "./Context/TranslationContext";
 
 function generateId() {
   return Math.floor(Math.random() * Date.now());
@@ -34,6 +37,8 @@ const initData = [
 ];
 
 function App() {
+  const { loggedInUser } = useAuth();
+
   const [items, setItems] = useState(initData);
   const [displayItems, setDisplayItems] = useState(initData);
   const [filterValue, setFilterValue] = useState({
@@ -62,19 +67,29 @@ function App() {
   }, [items, filterValue]);
 
   return (
-    <div className="expense-app">
-      <AddNewExpenseForm onAddNew={handleAddNew} />
-      <div className="card mt-4">
-        <div className="card-body">
-          <ExpenseFilter
-            filterValue={filterValue}
-            onChange={handleFilterChange}
-          />
-          <ExpenseChart items={displayItems} />
-          <ExpenseList items={displayItems} />
-        </div>
+    <TranslationProvider>
+      <div className="expense-app">
+        {loggedInUser ? (
+          <>
+            <AddNewExpenseForm onAddNew={handleAddNew} />
+            <div className="card mt-4">
+              <div className="card-body">
+                <ExpenseFilter
+                  filterValue={filterValue}
+                  onChange={handleFilterChange}
+                />
+                <ExpenseChart items={displayItems} />
+                <ExpenseList items={displayItems} />
+              </div>
+            </div>
+          </>
+        ) : (
+          <Login />
+        )}
+
+        <Footer />
       </div>
-    </div>
+    </TranslationProvider>
   );
 }
 
